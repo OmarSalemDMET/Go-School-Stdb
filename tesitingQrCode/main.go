@@ -66,8 +66,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func getAccount() {
-	username := "AdminUser"
-	password := "adminUser##1907"
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
 	hashedPassword := string(bytes)
 	db, err := sql.Open("sqlite3", "./stdb.db")
