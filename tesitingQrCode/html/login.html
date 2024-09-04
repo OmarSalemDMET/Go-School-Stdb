@@ -1,0 +1,471 @@
+{{block "index" .}}
+<!DOCTYPE html5>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link href="css/style.css" rel="stylesheet">
+  <script src="/js/htmx.js"></script>
+  <script src="/js/jquery.js"></script>
+</head>
+
+<style>
+  .in_box {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 12px;
+
+  }
+
+  .bodySty {
+    display: flexbox;
+    justify-content: center;
+    align-content: center;
+    background-color: #16325B;
+  }
+
+  .labelStyle {
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    font-style: italic;
+    margin: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 4%;
+  }
+
+  a {
+    color: #FFDC7F;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    font-style: italic;
+    margin: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+  }
+
+  .btnSty {
+    background-color: #FFDC7F;
+    color: black;
+    margin: 10px;
+    padding: 10px;
+    width: auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    border-style: none;
+    border-radius: 12px;
+  }
+
+  .btnSty:hover {
+    background-color: #227B94;
+    color: white;
+  }
+
+  .navbar ul {
+
+    list-style-type: none;
+
+    background-color: #FFDC7F;
+
+    padding: 0px;
+
+    margin: 0px;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    justify-content: center;
+  }
+
+  .navbar a {
+
+    color: black;
+
+    text-decoration: none;
+
+    padding: 15px;
+
+    display: block;
+
+    text-align: center;
+
+  }
+
+  .navbar a:hover {
+
+    background-color: hsl(0, 0%, 10%);
+    color: white;
+
+  }
+
+  .navbar li {
+
+    float: left;
+
+  }
+
+  .tbSty {
+    margin-left: 3%;
+  }
+</style>
+
+<body style="background-color: #16325B;">
+  {{template "navBar" .}}
+  <br><br>
+  {{template "login" .}}
+  <div id="Control_Panal">
+
+  </div>
+</body>
+
+</html>
+{{end}}
+{{block "login" .}}
+
+<form class="bodySty" id="loginform" hx-post="/login" hx-target="#panalDash" hx-swap="innerHTML">
+  <label class="labelStyle" for="un">username</label>
+  <input class="in_box" id="un" type="text" name="username" placeholder="username" required>
+  <br><br>
+  <label for="pass" class="labelStyle">password</label>
+  <input class="in_box" id="pass" type="password" name="password" placeholder="password" required>
+  <button class="btnSty" type="submit">login</button>
+</form>
+<br><br><br>
+<div id="panalDash"></div>
+{{end}}
+
+
+{{block "eMsg" .}}
+<h3>Error in Finding/Creating log</h3>
+{{end}}
+
+{{block "badLogin" .}}
+<h3>Couldn't login</h3>
+{{end}}
+
+{{block "Panal" . }}
+<div class="bodySty">
+  <h2 class="labelStyle">Create Accounts</h2>
+</div>
+<form class="bodySty" id="CreateAcc" hx-post="/createAccounts">
+  <br>
+  <label class="labelStyle" for="ucount">No. of new accounts</label>
+  <input class="in_box" id="ucount" type="number" name="count" placeholder="60" required><br>
+  <label class="labelStyle" for="uyear">Stage</label>
+  <input class="in_box" id="uyear" type="number" name="year" placeholder="2" required><br>
+  <label class="labelStyle" for="uday">Day</label>
+  <input class="in_box" id="uday" type="text" name="day" placeholder="monday" required><br>
+  <button class="btnSty" type="submit">Submit</button>
+</form>
+{{end}}
+
+{{block "A_options" .}}
+<div id="dashButtons" class="bodySty">
+  <form hx-get="/qrAttend" hx-target="#panalDash" hx-swap="innerHTML">
+    <button class="btnSty" type="submit">Attendance</button>
+  </form>
+
+  <form hx-get="/gradePanal" hx-target="#panaldash" hx-swap="innerhtml">
+    <button class="btnSty" type="submit">Grade Students</button>
+  </form>
+
+  <form hx-get="/accounts" hx-target="#panaldash" hx-swap="innerhtml">
+    <button class="btnSty" type="submit">create accounts</button>
+  </form>
+
+  <form hx-get="/gradesCsvs" hx-target="#panaldash" hx-swap="innerhtml">
+    <button class="btnSty" type="submit">Get Grades</button>
+  </form>
+
+</div>
+{{end}}
+
+{{block "StudentGrades" . }}
+
+<table cellspacing="15">
+  <tr>
+    <th class="thSty">id</th>
+    <th class="thSty">day</th>
+    <th class="thSty">Mark</th>
+  </tr>
+  {{range .}}
+  <tr>
+    <td class="tdSty">{{.Id}}</td>
+    <td class="tdSty">{{.Day}}</td>
+    <td class="tdSty">{{.Grade}}/{{.Mark}}</td>
+  </tr>
+  {{end}}
+</table>
+{{end}}
+
+{{block "Attendance" . }}
+
+<table cellspacing="15">
+  <tr>
+    <th class="thSty">id</th>
+    <th class="thSty">day</th>
+    <th class="thSty">period</th>
+    <th class="thSty">Attended</th>
+  </tr>
+  {{range .}}
+  <tr>
+    <td class="tdSty">{{.Id}}</td>
+    <td class="tdSty">{{.Day}}</td>
+    <td class="tdSty">{{.Period}}</td>
+    <td class="tdSty">{{.Attend}}</td>
+  </tr>
+  {{end}}
+</table>
+{{end}}
+
+{{block "getData" .}}
+<DOCTYPE html5>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="/js/htmx.js"></script>
+  </head>
+  <style>
+    .bodySty {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      background-color: #16325B;
+    }
+
+    .in_box {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 12px;
+
+    }
+
+    .tdSty {
+      background-color: #78B7D0;
+      color: white;
+      font-weight: bolder;
+      border-radius: 12px;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    .thSty {
+      background-color: #FFBE98;
+      color: black;
+      font-weight: bolder;
+      border-radius: 12px;
+      margin: 10px;
+      padding: 10px;
+
+    }
+
+    .btnSty {
+      background-color: #FFDC7F;
+      color: black;
+      margin: 10px;
+      padding: 10px;
+      width: auto;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: bolder;
+      border-style: none;
+      border-radius: 12px;
+    }
+
+    .btnSty:hover {
+      background-color: #227B94;
+      color: white;
+    }
+
+    .labelStyle {
+      color: white;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: bolder;
+      font-style: italic;
+      margin: 10px;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .navbar ul {
+
+      list-style-type: none;
+
+      background-color: #FFDC7F;
+
+      padding: 0px;
+
+      margin: 0px;
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+      display: flex;
+
+      justify-content: center;
+    }
+
+    .navbar a {
+
+      color: black;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: bolder;
+      font-style: italic;
+      text-decoration: none;
+
+      padding: 15px;
+
+      display: block;
+
+      text-align: center;
+
+    }
+
+    .navbar a:hover {
+
+      background-color: hsl(0, 0%, 10%);
+      color: white;
+
+    }
+
+    .navbar li {
+
+      float: left;
+
+    }
+  </style>
+  <html>
+
+  <body style="background-color: #16325B;">
+    {{template "navBar" .}}
+    <br>
+    <br>
+    <div class="bodySty" id="headerId">
+      <h2 class="labelStyle">Attendance</h2>
+    </div>
+
+    <html>
+    <form class="bodySty" hx-post="/getStudentData" hx-target="#sdata" hx-swap="innerHTML">
+      <input class="in_box" type="text" name="id" placeholder="Enter Your id" id="idBox" required>
+      <button class="btnSty" type="submit">Enter</button>
+    </form>
+    <div id="sdata" class="bodySty"></div>
+  </body>
+
+  </html>
+  {{end}}
+
+  {{block "dberror" .}}
+  <h3>Couldn't Retrieve data from database</h3>
+  {{end}}
+
+  {{block "dlink" .}}
+  <a href="/getCsv">Download the Accounts</a>
+  {{end}}
+
+  {{block "glink" .}}
+  <a href="/getGradesCsv">Download the Grades</a>
+  {{end}}
+
+
+
+  {{block "navBar" .}}
+  <nav class="navbar">
+    <ul>
+      <li><a href="/students">Attendance</a></li>
+      <li><a href="/StudentsMarks">Grades</a></li>
+      <li><a href="/loginPage">Assistant</a></li>
+    </ul>
+  </nav>
+
+  {{end}}
+
+  {{block "grades" .}}
+  <form class="bodySty" hx-post="/gradeStudents" hx-target="#panalDash" hx-swap="innerHTML">
+    <label class="labelStyle" for="year">Stage</label>
+    <input class="in_box" id="year" type="number" name="year" value="" placeholder="2" required>
+    <label class="labelStyle" for="day">Day</label>
+    <input class="in_box" id="day" type="text" name="day" value="" placeholder="monday" required>
+    <label class="labelStyle" for="mark">Mark</label>
+    <input class="in_box" type="number" id="mark" name="mark" required>
+    <br><br>
+    <table class="tbSty">
+      {{range .}}
+      <tr>
+        <td class="labelStyle">{{.Id}} -></td>
+        <td><input class="in_box" id="{{.Id}}" type="number" name="{{.Id}}" value="0" placeholder="0"></td>
+      </tr>
+      {{end}}
+    </table>
+    <br><br>
+    <button class="btnSty" type="submit">Grade</button>
+
+  </form>
+  {{end}}
+
+  {{block "classroom" .}}
+  <form class="bodySty" hx-post="/gradingTable" hx-target="#PanalDash" hx-swap="innerHTML">
+    <label class="labelStyle" for="year">Stage</label>
+    <input class="in_box" id="year" type="number" name="year" value="" placeholder="2" required>
+    <label class="labelStyle" for="day">Day</label>
+    <input class="in_box" id="day" type="text" name="day" value="" placeholder="monday" required>
+    <button type="submit" class="btnSty">Enter</button>
+  </form>
+  {{end}}
+  {{block "classroom2" .}}
+  <form class="bodySty" hx-post="/creatGradeLog" hx-target="#PanalDash" hx-swap="innerHTML">
+    <label class="labelStyle" for="year">Stage</label>
+    <input class="in_box" id="year" type="number" name="year" value="" placeholder="2" required>
+    <label class="labelStyle" for="day">Day</label>
+    <input class="in_box" id="day" type="text" name="day" value="" placeholder="monday" required>
+    <button type="submit" class="btnSty">Enter</button>
+  </form>
+  {{end}}
+
+
+  {{block "sMsgs" .}}
+  <h3 class="labelStyle">Success</h3>
+  {{end}}
+
+  {{block "GradePage" .}}
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="/js/htmx.js"></script>
+  </head>
+
+  <body style="background-color: #16325B;">
+    {{template "navBar" .}}
+    <br>
+    <br>
+    <div class="bodySty" id="headerId">
+      <h2 class="labelStyle">Grades</h2>
+    </div>
+    <form class="bodySty" hx-post="/getGrades" hx-target="#sdata" hx-swap="innerHTML">
+      <input class="in_box" type="text" name="id" placeholder="Enter Your id" id="idBox" required>
+      <button class="btnSty" type="submit">Enter</button>
+      <br>
+    </form>
+    <div id="sdata" class="bodySty"></div>
+
+  </body>
+
+  </html>
+
+  {{end}}

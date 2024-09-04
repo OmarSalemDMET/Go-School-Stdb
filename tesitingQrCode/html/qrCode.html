@@ -1,0 +1,88 @@
+{{block "qrCode" .}}
+<!DOCTYPE <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="labelStyle">Scan QR Codes</h1>
+    <div class="section">
+      <div id="my-qr-reader">
+      </div>
+    </div>
+  </div>
+  <div>
+    <button class="btnSty" id="bt">submit</button>
+  </div>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+</body>
+<script>
+  // script.js file
+  let t = []
+  document.getElementById("bt").addEventListener("click", submitJson)
+  function domReady(fn) {
+    if (
+      document.readyState === "complete" ||
+      document.readyState === "interactive"
+    ) {
+      setTimeout(fn, 1000);
+    } else {
+      document.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+  /**
+ * @param {Array} data
+ * @return {Array}
+ */
+
+
+  async function submitJson() {
+    let k = t
+    let j = {
+      data: k
+    }
+    let payload = JSON.stringify(j)
+    console.log(payload)
+    const url = "http://localhost:8080/addAttendance"
+    await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: payload
+    }).then((data) => console.log(data)).catch((e) => console.log(e))
+
+  }
+
+  domReady(function () {
+
+    // If found you qr code
+    function onScanSuccess(decodeText, decodeResult) {
+      k = {
+        id: decodeText,
+        period: 1
+      };
+
+      t.push(k)
+      console.log(t)
+    }
+
+    let htmlscanner = new Html5QrcodeScanner(
+      "my-qr-reader",
+      {fps: 10, qrbos: 250}
+    );
+    htmlscanner.render(onScanSuccess);
+  });
+</script>
+
+</html>>
+
+{{end}}
