@@ -432,7 +432,7 @@ func main() {
 	e.GET("/accounts", func(c echo.Context) error {
 		return c.Render(200, "Panal", nil)
 	})
-	e.GET("/students", func(c echo.Context) error {
+	e.GET("/", func(c echo.Context) error {
 		return c.Render(200, "getData", nil)
 	})
 	e.GET("/getCsv", func(c echo.Context) error {
