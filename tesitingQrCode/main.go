@@ -65,23 +65,7 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-func getAccount() {
-	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
-	hashedPassword := string(bytes)
-	db, err := sql.Open("sqlite3", "./stdb.db")
-	if err != nil {
-		return
-	}
-	defer db.Close()
-	query := fmt.Sprintf("INSERT INTO Users VALUES(\"%s\" , \"%s\")",
-		username,
-		hashedPassword)
-	_, err2 := db.Exec(query)
-	if err2 != nil {
-		log.Println(err2)
-	}
 
-}
 
 func WrapperHandler(c echo.Context) error {
 	var w Wrapper
@@ -420,7 +404,6 @@ func main() {
 	statement.Exec()
 	statement, _ = db.Prepare("CREATE TABLE IF NOT EXISTS Users(username TEXT PRIMARY KEY, password TEXT )")
 	statement.Exec()
-	getAccount()
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Static("/static"))
