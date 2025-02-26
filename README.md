@@ -134,11 +134,6 @@ Attendance-Grading-System/
 
 Contributions are welcome! Please fork the repository and submit a pull request for any improvements or bug fixes. For major changes, open an issue first to discuss your proposed modifications.
 
-## License
-
-*This project is currently not licensed.*  
-If you wish to use an open-source license (e.g., MIT License), please add the appropriate LICENSE file.
-
 ## Acknowledgements
 
 - **Echo Framework:** For the robust web framework.
